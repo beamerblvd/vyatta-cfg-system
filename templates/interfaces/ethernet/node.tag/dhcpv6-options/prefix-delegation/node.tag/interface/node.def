@@ -1,0 +1,13 @@
+multi:
+tag:
+type: txt
+help: DHCPv6 Prefix Delegation interface sub-delegation
+allowed: /opt/vyatta/sbin/vyatta-interfaces.pl --show=all
+val_help: <ifaceN>; "Name of other interface to receive delegation"
+syntax:expression: pattern $VAR(@) "^[a-z]{1,6}[0-9]+$" \
+                   ; "interface $VAR(@): not a valid name"
+syntax:expression: exec \
+    "if [ ! -d /sys/class/net/$VAR(@) ]; then \
+        echo \"interface $VAR(@): does not exist\";
+	exit 1; \
+    fi"

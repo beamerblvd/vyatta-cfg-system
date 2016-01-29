@@ -1,0 +1,6 @@
+tag:
+type: txt
+help: Prefix delegation node name or priority
+val_help: <pdN>; Prefix delegation node name or priority
+syntax:expression: pattern $VAR(@) "^[a-zA-Z0-9_-]+$" \
+                   ; "prefix-delegation $VAR(@): invalid"

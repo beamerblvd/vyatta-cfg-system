@@ -1,0 +1,6 @@
+multi:
+type: txt
+help: DHCPv6 Address Delegation Service Options
+val_help: slaac
+syntax:expression: pattern $VAR(@) "^(slaac)$" \
+                   ; "$VAR(@): not a valid option"

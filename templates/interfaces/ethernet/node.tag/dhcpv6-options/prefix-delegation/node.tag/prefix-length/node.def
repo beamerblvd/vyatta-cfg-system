@@ -1,0 +1,5 @@
+type: txt
+help: DHCPv6 Prefix Delegation prefix length (defaults to automatic)
+val_help: <length>; Prefix length
+syntax:expression: pattern $VAR(@) "^([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$" \
+                   ; "prefix-length $VAR(@): not a valid number between 1-128"
