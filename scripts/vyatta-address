@@ -11,9 +11,9 @@ fi
 case $1 in
     add)
         if [[ "$3" = "dhcp" ]]; then
-            exec /opt/vyatta/sbin/vyatta-interfaces.pl --dev="$2" --dhcp=start
+            exec /opt/vyatta/sbin/vyos-dhcpv4-client.pl --start --ifname "$2"
         elif [[ "$3" = "dhcpv6" ]]; then
-            exec /opt/vyatta/sbin/vyatta-dhcpv6-client.pl --start -ifname "$2"
+            exec /opt/vyatta/sbin/vyos-dhcpv6-client.pl --start --ifname "$2"
         elif [[ "$3" =~ ":" ]]; then
             # Ipv6 address
             if ! ip -6 addr list dev $2 | grep -q $3; then
@@ -28,11 +28,10 @@ case $1 in
     delete)
         # Get current address from interface when using DHCP
         if [[ "$3" = "dhcp" ]]; then
-            lease_file=/var/lib/dhcp3/dhclient_"$2".leases;
-            ip_address=$(sed -n 's/^\s\sfixed-address\s\(.*\);/\1/p' $lease_file | sed -n '$p');
+            ip_address=$(/opt/vyatta/sbin/vyos-dhcpv4-client.pl --get-leased-ip --ifname "$2");
         elif [[ "$3" = "dhcpv6" ]]; then
-            lease_file=/var/lib/dhcp3/dhclient_v6_"$2".leases;
-            ip_address=$(sed -n 's/^\s\s\s\siaaddr\s\(.*\)\s{/\1/p' $lease_file | sed -n '$p');        
+            # TODO: Check that this is sane
+            ip_address=$(/opt/vyatta/sbin/vyos-dhcpv4-client.pl --get-leased-ip --ifname "$2");
         else
             ip_address=$3;
         fi
@@ -46,9 +45,9 @@ case $1 in
             # device is already gone
             exit 0
         elif [[ "$3" = "dhcp" ]]; then
-            exec /opt/vyatta/sbin/vyatta-interfaces.pl --dev="$2" --dhcp=stop
+            exec /opt/vyatta/sbin/vyos-dhcpv4-client.pl --stop --ifname "$2"
         elif [[ "$3" = "dhcpv6" ]]; then
-            exec /opt/vyatta/sbin/vyatta-dhcpv6-client.pl --stop --ifname "$2"
+            exec /opt/vyatta/sbin/vyos-dhcpv6-client.pl --stop --ifname "$2"
         elif [[ "$3" =~ ":" ]]; then
             exec ip -6 addr del "$3" dev "$2"
         else

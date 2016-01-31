@@ -1,0 +1,47 @@
+#!/usr/bin/perl
+#
+# Module: dhcp
+# Releases DHCPv4 and DHCPv6 leases on link down
+#
+# Copyright (C) 2016 VyOS maintainers and contributors
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Author: Nick Williams <nicholas+vyos@nicholaswilliams.net>
+# Date: January 2016
+#
+# **** End License ****
+#
+
+use lib "/opt/vyatta/share/perl5/";
+use Vyatta::Misc qw(is_dhcp_4or6_enabled);
+use VyOS::DHCP qw(client_is_running client_release_interface);
+
+use strict;
+use warnings;
+
+my $ifname = shift;
+if (!$ifname) {
+    print "Usage: dhcp [interface name]\n";
+    exit 1;
+}
+
+# Only do this if interface is configured to use DHCPv4 or DHCPv6 for getting IP addresses.
+if (is_dhcp_4or6_enabled($ifname)) {
+   # Release the lease, but don't bother if the client isn't running.
+   client_is_running() and client_release_interface($ifname);
+   exit 0;
+}
+
+print "Interface $ifname is not using DHCP.\n";
+exit 1;

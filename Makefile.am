@@ -82,11 +82,12 @@ sbin_SCRIPTS += scripts/install/install-postinst-new
 sbin_SCRIPTS += scripts/install/install-image
 sbin_SCRIPTS += scripts/vyatta-bridge.pl
 sbin_SCRIPTS += scripts/vyatta-bridgegroup-depedency.pl
-sbin_SCRIPTS += scripts/vyatta-dhcpv6-client.pl
 sbin_SCRIPTS += scripts/vyatta-update-grub.pl
 sbin_SCRIPTS += scripts/vyos-intfwatchd
 sbin_SCRIPTS += scripts/ec2-check.pl
 sbin_SCRIPTS += scripts/is_port_available.pl
+sbin_SCRIPTS += scripts/vyos-dhcpv4-client.pl
+sbin_SCRIPTS += scripts/vyos-dhcpv6-client.pl
 
 sbin_PROGRAMS = src/valid_address
 sbin_PROGRAMS += src/local_ip
